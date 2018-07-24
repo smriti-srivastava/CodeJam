@@ -1,0 +1,63 @@
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using System.Text;
+using System;
+
+class Solution {
+
+    // Complete the commonChild function below.
+    static int commonChild(string s1, string s2) {
+        int[,] string_matrix = new int[s1.Length, s2.Length];
+        int i,j;
+        for(i = 0 ;i < s1.Length; i++)
+        {    
+            if(s1[i] == s2[0])
+            {   for(j=i ; j<s1.Length ; j++)
+                string_matrix[0, j] = 1;
+                break;
+            }    
+            string_matrix[0, i] = 0;
+        }    
+        for(i = 0; i<s2.Length; i++)
+        {
+            if(s2[i] == s1[0])
+            {
+                    string_matrix[i, 0] = 1;
+            }
+            else
+            string_matrix[i, 0] = 0;
+        }
+        for(i=1; i<s1.Length; i++)
+            for(j=1; j<s2.Length; j++)
+                
+                if(s1[j]==s2[i])
+                        string_matrix[i,j] = string_matrix[i-1, j-1]+1;
+                else
+                    string_matrix[i,j] = (string_matrix[i, j-1]>string_matrix[i-1, j])? string_matrix[i,j-1]:string_matrix[i-1, j];
+        return string_matrix[s1.Length-1, s2.Length-1];
+    }
+
+    static void Main(string[] args) {
+        TextWriter textWriter = new StreamWriter(@System.Environment.GetEnvironmentVariable("OUTPUT_PATH"), true);
+
+        string s1 = Console.ReadLine();
+
+        string s2 = Console.ReadLine();
+
+        int result = commonChild(s1, s2);
+
+        textWriter.WriteLine(result);
+
+        textWriter.Flush();
+        textWriter.Close();
+    }
+}
